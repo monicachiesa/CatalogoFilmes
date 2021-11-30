@@ -1,12 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler'
+import Routes from './src/routes';
+import { StatusBar } from 'react-native'
 
 function App() {
   return (
-    <View style={{ marginTop: 100 }}>
-      <Text style={{ color: "#ff0000", fontSize: 30 }}>Sujeito Programador</Text>
-    </View>
+    <NavigationContainer>
+      <StatusBar hidden={true} /> 
+      <Routes />
+    </NavigationContainer>
   );
 }
 
