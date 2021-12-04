@@ -7,4 +7,6 @@
 ### expo install @react-navigation/native-stack
 ### expo install @react-navigation/drawer
 ### expo install react-native-gesture-handler react-native-reanimated
+### expo install axios
+
 
