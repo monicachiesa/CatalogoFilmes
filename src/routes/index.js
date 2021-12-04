@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import StackRoutes from './StackRoutes';
+import StackRoutes from './stackRoutes';
 import Movies from '../pages/Movies';
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
 
