@@ -7,3 +7,9 @@ export function getListMovies(size, movies) {
     }
     return popularMovies;
 }
+
+//Gerar um num aleatório pra mostrar no "em cartaz"
+export function randomBanner(movies) {
+    return Math.floor(Math.random() * movies.length)
+    
+}
