@@ -8,5 +8,6 @@
 ### expo install @react-navigation/drawer
 ### expo install react-native-gesture-handler react-native-reanimated
 ### expo install axios
+### expo install react-native-stars
 
 
