@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
 
-import { Container, Header, HeaderButton, Banner, ButtonLink, Title } from './styles';
+import { Container, Header, HeaderButton, Banner, ButtonLink, Title, ContentArea, Rate, ListGenres, Description } from './styles';
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import api, { key } from '../../services/api'
-import { NativeModules } from 'react-native';
+import { ScrollView, Modal } from 'react-native';
+import Stars from 'react-native-stars';
+import Genres from '../../components/Genres';
+import ModalLink from '../../components/ModalLink';
+import { saveMovie } from '../../utils/storage';
 
 function Detail() {
 
@@ -12,6 +16,7 @@ function Detail() {
     const route = useRoute();
 
     const [movie, setMovie] = useState({});
+    const [openLink, setOpenLink] = useState(false);
 
     useEffect(() => {
         let isActive = true;
@@ -38,6 +43,11 @@ function Detail() {
         }
     }, [])
 
+   async function favoriteMovie(movie) {  //passa o filme que quer salvar, e é recebido la debaixo
+      await saveMovie('@primereact', movie);  
+      alert('Filme salvo!');
+    }
+
     return (
         <Container>
             <Header>
@@ -48,9 +58,9 @@ function Detail() {
                         color="#FFF"
                     />
                 </HeaderButton>
-                <HeaderButton>
+                <HeaderButton onPress={() => favoriteMovie(movie)}> 
                     <Ionicons
-                        name="bookmark"
+                        name="bookmark-outline"
                         size={28}
                         color="#FFF"
                     />
@@ -61,10 +71,44 @@ function Detail() {
                 source={{ uri: `https://image.tmdb.org/t/p/original/${movie.poster_path}` }}
             />
 
-            <ButtonLink>
+            <ButtonLink onPress={() => setOpenLink(true)}>
                 <Feather name="link" size={24} color="#FFF" />
             </ButtonLink>
-            <Title numberOfLines={1} > {movie.Title}</Title>
+            <Title numberOfLines={2} > {movie.Title}</Title>
+
+            <ContentArea>
+                <Stars
+                    default={movie.vote_average}
+                    count={10}
+                    half={true}
+                    starSize={20}
+                    fullStar={<Ionicons name="md-star" size={24} color="#E7A74E" />}
+                    emptyStar={<Ionicons name="md-star-outline" size={24} color="#E7A74E" />}
+                    halfStar={<Ionicons name="md-star-half" size={24} color="#E7A74E" />}
+                    disable={true}
+                />
+                <Rate>{movie.vote_average}/10</Rate>
+            </ContentArea>
+            <ListGenres
+                data={movie?.genres}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={({ item }) => <Genres data={item} />}
+            />
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Title>Descrição</Title>
+                <Description>{movie?.overview}</Description>
+            </ScrollView>
+
+            <Modal animationType="slide" transparent={true} visible={openLink}>
+                <ModalLink 
+                link={movie?.homepage}
+                title={movie.title}
+                closeModal={() => setOpenLink(false)}
+                />
+            </Modal>
         </Container>
     )
 }

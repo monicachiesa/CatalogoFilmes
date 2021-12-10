@@ -25,6 +25,9 @@ function Home() {
     const [topMovies, setTopMovies] = useState([]);
     const [bannerMovie, setBannerMovie] = useState({});
     const [loading, setLoading] = useState(true);  //carregando
+    const [input, setInput] = useState('');
+
+
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -88,6 +91,17 @@ function Home() {
         navigation.navigate('Detail', { id: item.id }) //ir até a tela de detalhes, lá do routes pega esse valor e envia o id do filme
     }
 
+    function handleSearchMovie() {
+
+        if (input === '') {
+            alert("Preencha algum nome");
+            return;
+        }
+
+        navigation.navigate('Search', { name: input })
+        setInput('');
+    }
+
     if (loading) {
         return (<Container>
             <ActivityIndicator size="large" color="#FFF" />
@@ -102,9 +116,11 @@ function Home() {
                 <Input
                     placeholder="Ex: Vingadores"
                     placeholderTextColor="#DDD"
+                    value={input}
+                    onChangeText={(text) => setInput(text)}
                 />
 
-                <SearchButton>
+                <SearchButton onPress={handleSearchMovie}>
                     <Feather name="search" size={30} color="#FFF" />
                 </SearchButton>
             </SearchContainer>
