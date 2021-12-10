@@ -11,3 +11,5 @@
 ### expo install react-native-stars
 ### expo install react-native-webview
 
+Utilizamos o Async Storage para armazenar os filmes favoritos salvos (banco de dados local)
+### npm install @react-navigation/native @react-navigation/native-stack
