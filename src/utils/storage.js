@@ -28,8 +28,8 @@ export async function saveMovie(key, newMovie) {
 
     moviesStored.push(newMovie);
     try { //coloca dentro da variável de filmes o filme
-        await AsyncStorage.setItem(key, JSON.stringify(moviesStored)); //salva o filme
-        alert('Salvo')
+        let result  =  await AsyncStorage.setItem(key, JSON.stringify(moviesStored)); 
+        console.log(result);
     }
     catch (error) {
         // Tratar o erro adequadamente
