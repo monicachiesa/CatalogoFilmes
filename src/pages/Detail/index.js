@@ -10,6 +10,7 @@ import Genres from '../../components/Genres';
 import ModalLink from '../../components/ModalLink';
 import { saveMovie } from '../../utils/storage';
 
+
 function Detail() {
 
     const navigation = useNavigation();
