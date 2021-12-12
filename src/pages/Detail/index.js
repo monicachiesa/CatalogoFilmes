@@ -8,7 +8,7 @@ import { ScrollView, Modal } from 'react-native';
 import Stars from 'react-native-stars';
 import Genres from '../../components/Genres';
 import ModalLink from '../../components/ModalLink';
-import { saveMovie } from '../../utils/storage';
+import { saveMovie, hasMovie, deleteMovie } from '../../utils/storage';
 
 
 function Detail() {
@@ -18,6 +18,7 @@ function Detail() {
 
     const [movie, setMovie] = useState({});
     const [openLink, setOpenLink] = useState(false);
+    const [favoritedMovie, setFavoritedMovie] = useState(false);
 
     useEffect(() => {
         let isActive = true;
@@ -31,8 +32,13 @@ function Detail() {
             }).catch((err) => {
                 console.log("ERROOOOOOOOOOO", err)
             })
+
             if (isActive) {
                 setMovie(response.data);
+
+                const isFavorite = await hasMovie(response.data)
+
+                setFavoritedMovie(isFavorite);
             }
         }
         if (isActive) {
@@ -44,9 +50,17 @@ function Detail() {
         }
     }, [])
 
-   async function favoriteMovie(movie) {  //passa o filme que quer salvar, e é recebido la debaixo
-      await saveMovie('@primereact', movie);  
-      alert('Filme salvo!');
+    async function handleFavoriteMovie(movie) {        //passa o filme que quer salvar, e é recebido la debaixo
+
+        if (favoritedMovie) {
+            await deleteMovie(movie.id);
+            setFavoritedMovie(false);
+            alert('Filme deletado')
+        } else {
+            await saveMovie('@primereact', movie);
+            setFavoritedMovie(true);
+            alert('Filme salvo!');
+        }
     }
 
     return (
@@ -59,12 +73,20 @@ function Detail() {
                         color="#FFF"
                     />
                 </HeaderButton>
-                <HeaderButton onPress={() => favoriteMovie(movie)}> 
-                    <Ionicons
-                        name="bookmark-outline"
-                        size={28}
-                        color="#FFF"
-                    />
+                <HeaderButton onPress={() => handleFavoriteMovie(movie)}>
+                    {favoritedMovie ? (
+                        <Ionicons
+                            name="bookmark" //ícone cheio (está salvo)
+                            size={28}
+                            color="#FFF"
+                        />
+                    ) : (
+                        <Ionicons
+                            name="bookmark-outline" //icone vazio (não está salvo)
+                            size={28}
+                            color="#FFF"
+                        />
+                    )}
                 </HeaderButton>
             </Header>
             <Banner
@@ -104,10 +126,10 @@ function Detail() {
             </ScrollView>
 
             <Modal animationType="slide" transparent={true} visible={openLink}>
-                <ModalLink 
-                link={movie?.homepage}
-                title={movie.title}
-                closeModal={() => setOpenLink(false)}
+                <ModalLink
+                    link={movie?.homepage}
+                    title={movie.title}
+                    closeModal={() => setOpenLink(false)}
                 />
             </Modal>
         </Container>

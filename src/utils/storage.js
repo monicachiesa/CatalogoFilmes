@@ -16,7 +16,7 @@ export async function getMoviesSave(key) {
 
 //salvar
 export async function saveMovie(key, newMovie) {
-    let moviesStored = getMoviesSave(key);
+    let moviesStored = await getMoviesSave(key);
 
     //se tiver filme com o mesmo id ou salvo é pra ignorar
     const hasMovie = moviesStored.some(item => item.id === newMovie.id);   // o some verifica dentro do array
@@ -38,7 +38,7 @@ export async function saveMovie(key, newMovie) {
 }
 //deletar um filme
 export async function deleteMovie(id) {
-    let moviesStored = getMoviesSave('@primereact');
+    let moviesStored = await getMoviesSave('@primereact');
 
     let myMovies = moviesStored.filter( item => {
         return (item.id !== id)  //deleta o filme que quiser
@@ -50,7 +50,12 @@ export async function deleteMovie(id) {
 
 //filtrar pra ver se já está salvo
 export async function hasMovie(movie) {
-    let moviesStored = getMoviesSave('@primereact');
+    let moviesStored = await getMoviesSave('@primereact');
     const hasMovie = moviesStored.find(item => item.id === movie.id) //o find passa por todo array pra procurar
 
+    if(hasMovie) {
+        return true;
+    }
+
+    return false;
 }
